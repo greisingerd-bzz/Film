@@ -24,6 +24,7 @@ Dieses Projekt implementiert eine Backend-API für die Verwaltung von Filmdaten.
 - `POST /api/film`: Erstellt einen neuen Film.
 - `PUT /api/film/{id}`: Aktualisiert einen vorhandenen Film.
 - `DELETE /api/film/{id}`: Löscht einen Film.
+- Detaillierte Dokumentation (OpenAPIDoku) liegt im Projektordner.
 
 ## Autor
 - **Name**: Dennis Greisinger
