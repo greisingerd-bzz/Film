@@ -10,7 +10,7 @@ Dieses Projekt implementiert eine Backend-API für die Verwaltung von Filmdaten.
 
 
 ## Validierungsregeln
-1. **Erscheinungsjahr**: Das Datum muss in der Vergangenheit liegen.
+1. **Erscheinungsdatum**: Das Datum muss in der Vergangenheit liegen.
 2. **Bewertung**: Die Bewertung eines Films muss zwischen 0 und 10 liegen.
 3. **Laufzeit**: Die Laufzeit des Films muss eine positive Ganzzahl sein.
 
