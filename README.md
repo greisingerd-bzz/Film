@@ -4,6 +4,7 @@
 Dieses Projekt implementiert eine Backend-API für die Verwaltung von Filmdaten. Es umfasst Dienste zum Lesen, Erstellen, Aktualisieren und Löschen von Filminformationen. Die Datenstruktur basiert auf zwei miteinander verbundenen Tabellen, `Film` und `Genre`, wobei `Film` die Haupttabelle ist.
 
 ## Visuals
+![Screenshot 2024-05-24 141613](https://github.com/greisingerd-bzz/Film/assets/114403483/006a2a40-bc27-4521-9ec2-5fcbe93412b8)
 ![FilmKlassendiagram2](https://github.com/greisingerd-bzz/Film/assets/114403483/97b2a297-afe4-4c8e-8dfb-2454689479af)
 ![Screenshot 2024-05-24 135034](https://github.com/greisingerd-bzz/Film/assets/114403483/96568101-156f-4111-ad5b-993a20190d8b)
 
