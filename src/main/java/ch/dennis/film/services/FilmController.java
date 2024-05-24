@@ -2,7 +2,6 @@ package ch.dennis.film.services;
 
 import ch.dennis.film.entities.Film;
 import ch.dennis.film.repositories.FilmRepository;
-import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -21,11 +20,10 @@ public class FilmController {
     private FilmRepository filmRepository;
     private final Logger logger = LogManager.getLogger(FilmController.class);
 
-    // Grundlegende CRUD-Operationen bereits definiert
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    @PermitAll
+    @RolesAllowed({"Admin", "Poster", "User"}) // Zugriff für Lesen erlauben
     public Film findFilmById(@PathParam("id") Long id) {
         logger.info("Fetching film with ID {}", id);
         return filmRepository.findById(id).orElse(null);
@@ -34,7 +32,7 @@ public class FilmController {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    @PermitAll
+    @RolesAllowed({"Admin", "Poster", "User"}) // Zugriff für Lesen erlauben
     public List<Film> getAllFilms() {
         logger.info("Fetching all films");
         return filmRepository.findAll();
@@ -43,7 +41,7 @@ public class FilmController {
     @GET
     @Path("/by-regisseur/{regisseur}")
     @Produces(MediaType.APPLICATION_JSON)
-    @PermitAll
+    @RolesAllowed({"Admin", "Poster", "User"}) // Zugriff für Lesen erlauben
     public List<Film> getFilmsByRegisseur(@PathParam("regisseur") String regisseur) {
         logger.info("Fetching films by regisseur {}", regisseur);
         return filmRepository.findFilmsByRegisseur(regisseur);
@@ -52,7 +50,7 @@ public class FilmController {
     @GET
     @Path("/by-genre/{genreId}")
     @Produces(MediaType.APPLICATION_JSON)
-    @PermitAll
+    @RolesAllowed({"Admin", "Poster", "User"}) // Zugriff für Lesen erlauben
     public List<Film> getFilmsByGenre(@PathParam("genreId") Long genreId) {
         logger.info("Fetching films by genre ID {}", genreId);
         return filmRepository.findFilmsByGenreId(genreId);
@@ -61,24 +59,16 @@ public class FilmController {
     @GET
     @Path("/count")
     @Produces(MediaType.TEXT_PLAIN)
-    @PermitAll
+    @RolesAllowed({"Admin", "Poster", "User"}) // Zugriff für Lesen erlauben
     public Response getCountOfFilms() {
-        try {
-            long count = filmRepository.count();
-            return Response.ok("Total films: " + count).build();
-        } catch (RuntimeException ex) {
-            logger.error("Error counting films: {}", ex.getMessage());
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Database Error: " + ex.getMessage())
-                    .build();
-        }
+        long count = filmRepository.count();
+        return Response.ok("Total films: " + count).build();
     }
-
 
     @GET
     @Path("/between-dates")
     @Produces(MediaType.APPLICATION_JSON)
-    @PermitAll
+    @RolesAllowed({"Admin", "Poster", "User"}) // Zugriff für Lesen erlauben
     public List<Film> getFilmsBetweenDates(@QueryParam("start") Date start, @QueryParam("end") Date end) {
         logger.info("Fetching films between dates {} and {}", start, end);
         return filmRepository.findFilmsBetweenDates(start, end);
@@ -87,23 +77,18 @@ public class FilmController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"Admin", "Poster"})
+    @RolesAllowed({"Admin", "Poster"}) // Nur Admin und Poster dürfen erstellen
     public Response createFilm(Film film) {
-        try {
-            Film savedFilm = filmRepository.save(film);
-            logger.info("Created film with ID {}", savedFilm.getId());
-            return Response.status(Response.Status.CREATED).entity(savedFilm).build();
-        } catch (Exception e) {
-            logger.error("Error creating film: {}", e.getMessage());
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        }
+        Film savedFilm = filmRepository.save(film);
+        logger.info("Created film with ID {}", savedFilm.getId());
+        return Response.status(Response.Status.CREATED).entity(savedFilm).build();
     }
 
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed("Admin")
+    @RolesAllowed("Admin") // Nur Admin darf aktualisieren
     public Response updateFilm(@PathParam("id") Long id, Film filmDetails) {
         return filmRepository.findById(id).map(existingFilm -> {
             existingFilm.setTitel(filmDetails.getTitel());
@@ -123,7 +108,7 @@ public class FilmController {
 
     @DELETE
     @Path("/{id}")
-    @RolesAllowed("Admin")
+    @RolesAllowed("Admin") // Nur Admin darf löschen
     public Response deleteFilm(@PathParam("id") Long id) {
         if (filmRepository.existsById(id)) {
             filmRepository.deleteById(id);
